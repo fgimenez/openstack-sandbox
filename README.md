@@ -1,4 +1,6 @@
-Add ubuntu box with 
+The purpose is setting up an openstack sandbox environment with a chef provisioned Vagrant box.
+
+Add ubuntu box with: 
 
     $ vagrant box add ubuntu-1204-amd64 http://dl.dropbox.com/u/1537815/precise64.box
 
