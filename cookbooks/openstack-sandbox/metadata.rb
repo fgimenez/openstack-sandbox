@@ -7,3 +7,6 @@ long_description "Setup of openstack"
 version          "0.0.1"
 recipe           "openstack-sandbox", "Setup of openstack"
 
+%w[ubuntu debian].each do |os|
+  supports os
+end
