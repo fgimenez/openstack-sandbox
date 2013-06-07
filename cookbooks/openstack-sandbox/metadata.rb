@@ -1,4 +1,4 @@
-name             "openstack"
+name             "openstack-sandbox"
 maintainer       "Federico Gimenez Nieto"
 maintainer_email "federico.gimenez@gmail.com"
 license          "Apache 2.0"
