@@ -6,3 +6,4 @@
 .ruby-gemset
 .kitchen/
 .kitchen.local.yml
+/iso
