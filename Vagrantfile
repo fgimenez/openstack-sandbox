@@ -2,7 +2,10 @@
 # vi: set ft=ruby :
 
 Vagrant::Config.run do |config|
-  config.vm.box = "ubuntu-1204-amd64"
+  config.vm.hostname = "openstack-sandbox"
+
+  config.vm.box = "canonical-ubuntu-12.04"
+  config.vm.box_url = "http://cloud-images.ubuntu.com/vagrant/precise/current/precise-server-cloudimg-amd64-vagrant-disk1.box"
 
   # memory
   config.vm.customize ["modifyvm", :id, "--memory", 2048]
