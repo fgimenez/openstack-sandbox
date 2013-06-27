@@ -1,0 +1,11 @@
+{
+  "sha": "052dce609238327411f448eabb3be1d6217d10a9",
+  "sources": {
+    "openstack-sandbox": {
+      "path": "."
+    },
+    "apt": {
+      "locked_version": "1.10.0"
+    }
+  }
+}

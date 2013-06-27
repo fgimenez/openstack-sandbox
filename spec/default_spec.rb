@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'chefspec'
 
 describe 'openstack-sandbox::default' do
   let(:runner) { ChefSpec::ChefRunner.new(platform: 'ubuntu', version: '12.04').

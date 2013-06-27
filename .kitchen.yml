@@ -4,14 +4,14 @@ driver_config:
   require_chef_omnibus: true
   memory: 2048
   network:
-    - ['hostonly', '172.26.0.2', {adapter: 2, netmask: "255.255.0.0"}]
-    - ['hostonly', '10.0.0.2', {adapter: 3, netmask: "255.0.0.0"}]
+    - ['private_network', '172.26.0.2']
+    - ['private_network', '10.0.0.2']
   
 platforms:
 - name: ubuntu-12.04
   driver_config:
-    box: opscode-ubuntu-12.04
-    box_url: https://opscode-vm.s3.amazonaws.com/vagrant/opscode_ubuntu-12.04_provisionerless.box
+    box: canonical-ubuntu-12.04
+    box_url: http://cloud-images.ubuntu.com/vagrant/precise/current/precise-server-cloudimg-amd64-vagrant-disk1.box
 
 suites:
 - name: default
