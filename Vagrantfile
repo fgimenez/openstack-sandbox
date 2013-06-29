@@ -6,7 +6,9 @@ Vagrant.configure("2") do |config|
 
   config.vm.box = "canonical-ubuntu-12.04"
   config.vm.box_url = "http://cloud-images.ubuntu.com/vagrant/precise/current/precise-server-cloudimg-amd64-vagrant-disk1.box"
-  
+  #config.vm.box = "lxc-ubuntu-12.04"
+  #config.vm.box_url = "http://dl.dropbox.com/u/13510779/lxc-precise-amd64-2013-05-08.box"
+
   # Ensure Chef is installed for provisioning
   config.omnibus.chef_version = :latest
 
