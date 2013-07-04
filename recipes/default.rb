@@ -10,4 +10,4 @@
 include_recipe "apt"
 include_recipe "openstack-sandbox::users"
 include_recipe "openstack-sandbox::dependencies"
-
+include_recipe "openstack-sandbox::configuration"

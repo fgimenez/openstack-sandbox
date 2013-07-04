@@ -1,4 +1,4 @@
-require 'chefspec'
+require_relative 'spec_helper'
 
 describe 'openstack-sandbox::default' do
   let(:runner) { ChefSpec::ChefRunner.new(platform: 'ubuntu', version: '12.04').
@@ -15,4 +15,9 @@ describe 'openstack-sandbox::default' do
   it 'includes the openstack-sandbox::dependencies recipe' do
     expect(runner).to include_recipe('openstack-sandbox::dependencies')
   end
+
+  it 'includes the openstack-sandbox::configuration recipe' do
+    expect(runner).to include_recipe('openstack-sandbox::configuration')
+  end
+
 end

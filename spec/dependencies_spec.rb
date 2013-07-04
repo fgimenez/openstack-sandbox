@@ -1,4 +1,4 @@
-require 'chefspec'
+require_relative 'spec_helper'
 
 describe 'openstack-sandbox::dependencies' do
   let(:runner) { ChefSpec::ChefRunner.new(platform: 'ubuntu', version: '12.04').
@@ -42,6 +42,10 @@ describe 'openstack-sandbox::dependencies' do
 
   it "installs the unzip package" do
     expect(runner).to install_package('unzip')
+  end
+
+  it "installs the ntp package" do
+    expect(runner).to install_package('ntp')
   end
 
 end
