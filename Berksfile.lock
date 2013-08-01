@@ -1,11 +1,20 @@
 {
-  "sha": "98349dcef43afee00fc0cf22849afdd6285a2c13",
+  "sha": "2cffdd726b754c791f0d61ce4c218b28c57750e6",
   "sources": {
     "openstack-sandbox": {
       "path": "."
     },
     "apt": {
       "locked_version": "1.10.0"
+    },
+    "mysql": {
+      "locked_version": "3.0.0"
+    },
+    "openssl": {
+      "locked_version": "1.0.2"
+    },
+    "build-essential": {
+      "locked_version": "1.4.0"
     }
   }
 }
