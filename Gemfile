@@ -1,7 +1,6 @@
 source 'https://rubygems.org'
 
 gem 'foodcritic'
-gem 'rake-foodcritic'
 gem 'chefspec', '1.3.1'
 gem 'rspec'
 gem 'test-kitchen', '~> 1.0.0.alpha.7'
