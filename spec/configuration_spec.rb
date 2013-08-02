@@ -23,26 +23,30 @@ describe 'openstack-sandbox::configuration' do
   end
 
   context 'mysql' do
+    let(:base_connection_command) {"/usr/bin/mysql -u root -p#{mysql_root_password} -D mysql -r -B -N -e"}
+
     it "makes the server listen for all ips" do
       expect(runner).to execute_command("sed -i 's/127.0.0.1/0.0.0.0/g' " +
         "/etc/mysql/my.cnf")
     end
 
+    it "creates the default user" do
+      expect(runner).to execute_command("#{base_connection_command} \"CREATE USER " +
+       "'#{mysql_user_name}' IDENTIFIED BY '#{mysql_user_password}'\"")
+    end
+
     it "creates the default database" do
-      expect(runner).to execute_command("/usr/bin/mysql -u root " +
-        "-p#{mysql_root_password} -D mysql -r -B -N -e \"CREATE DATABASE " +
+      expect(runner).to execute_command("#{base_connection_command} \"CREATE DATABASE " +
         "#{mysql_database_name}\"")
     end
 
     it "grants the default user with the right permissions" do
-      expect(runner).to execute_command("/usr/bin/mysql -u root " +
-        "-p#{mysql_root_password} -D mysql -r -B -N -e \"GRANT ALL " +
+      expect(runner).to execute_command("#{base_connection_command} \"GRANT ALL " +
         "ON #{mysql_database_name}.* to '#{mysql_user_name}'@'%'\"")
     end
 
     it "sets the nova password" do
-      expect(runner).to execute_command("/usr/bin/mysql -u root " +
-        "-p#{mysql_root_password} -D mysql -r -B -N -e \"SET PASSWORD FOR "  +
+      expect(runner).to execute_command("#{base_connection_command} \"SET PASSWORD FOR "  +
         "'#{mysql_user_name}'@'%' = PASSWORD('#{mysql_user_password}')\"")
     end
 

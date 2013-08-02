@@ -9,13 +9,19 @@ end
 
 #mysql
 execute "make mysql server listen on all ips" do
-  command "sed -i 's/127.0.0.1/0.0.0.0/g' /etc/mysql/my.cnf"
+  command "sed -i 's/bind-address/#bind-address/g' /etc/mysql/my.cnf"
+  only_if {`grep \#bind-address /etc/mysql/my.cnf`.to_i == 0}
 end
 
 base_connection_command = "/usr/bin/mysql -u root -p#{node['mysql']['server_root_password']} -D mysql -r -B -N -e"
+execute "create default user" do
+  command "#{base_connection_command} \"CREATE USER '#{node['mysql']['default_user_name']}' IDENTIFIED BY '#{node['mysql']['default_user_password']}'\""
+  only_if {`#{base_connection_command} \"SELECT COUNT(*) FROM user where User='#{node['mysql']['default_user_name']}'\"`.to_i == 0 }
+end
+
 execute "create default database" do
   command "#{base_connection_command} \"CREATE DATABASE #{node['mysql']['default_database_name']}\""
-  not_if {`#{base_connection_command} \"SHOW DATABASES LIKE '#{node['mysql']['default_database_name']}'\"`.to_i == 0 }
+  only_if {`#{base_connection_command} \"SHOW DATABASES LIKE '#{node['mysql']['default_database_name']}'\"`.to_i == 0 }
 end
 
 execute "grant permissions" do
