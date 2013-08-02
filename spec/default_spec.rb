@@ -24,4 +24,8 @@ describe 'openstack-sandbox::default' do
     expect(runner).to include_recipe('openstack-sandbox::configuration')
   end
 
+  it 'includes the openstack-sandbox::nova recipe' do
+    expect(runner).to include_recipe('openstack-sandbox::nova')
+  end
+
 end
