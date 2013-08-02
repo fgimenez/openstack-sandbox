@@ -15,15 +15,17 @@ end
 
 execute "create admin user" do
   command 'nova-manage user admin openstack'
-  only_if {`nova-manage user list | grep openstack`.to_i == 0}
+  not_if "nova-manage user list | grep openstack"
 end
 
 execute "add cloudamin role to the admin user" do
   command 'nova-manage role add openstack cloudadmin'
+  not_if "nova-manage role has openstack cloudadmin | grep True"
 end
 
 execute "create default project for admin user" do
   command 'nova-manage project create cookbook openstack'
+  not_if "nova-manage project list | grep cookbook"
 end
 
 execute "zip project files" do
