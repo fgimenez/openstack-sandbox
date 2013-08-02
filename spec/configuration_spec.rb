@@ -31,7 +31,7 @@ describe 'openstack-sandbox::configuration' do
     it "creates the default database" do
       expect(runner).to execute_command("/usr/bin/mysql -u root " +
         "-p#{mysql_root_password} -D mysql -r -B -N -e \"CREATE DATABASE " +
-        "'#{mysql_database_name}'\"")
+        "#{mysql_database_name}\"")
     end
 
     it "grants the default user with the right permissions" do
@@ -43,7 +43,7 @@ describe 'openstack-sandbox::configuration' do
     it "sets the nova password" do
       expect(runner).to execute_command("/usr/bin/mysql -u root " +
         "-p#{mysql_root_password} -D mysql -r -B -N -e \"SET PASSWORD FOR "  +
-        "'#{mysql_user_name}'@'%' = PASSWORD(#{mysql_user_password})\"")
+        "'#{mysql_user_name}'@'%' = PASSWORD('#{mysql_user_password}')\"")
     end
 
     it "restarts the mysqld service" do

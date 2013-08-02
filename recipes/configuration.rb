@@ -14,8 +14,8 @@ end
 
 base_connection_command = "/usr/bin/mysql -u root -p#{node['mysql']['server_root_password']} -D mysql -r -B -N -e"
 execute "create default database" do
-  command "#{base_connection_command} \"CREATE DATABASE '#{node['mysql']['default_database_name']}'\""
-  only_if {`#{base_connection_command} \"SHOW DATABASES LIKE '#{node['mysql']['default_database_name']}'\"`.to_i == 0 }
+  command "#{base_connection_command} \"CREATE DATABASE #{node['mysql']['default_database_name']}\""
+  not_if {`#{base_connection_command} \"SHOW DATABASES LIKE '#{node['mysql']['default_database_name']}'\"`.to_i == 0 }
 end
 
 execute "grant permissions" do
@@ -23,7 +23,7 @@ execute "grant permissions" do
 end
 
 execute "set default user password" do
-  command "#{base_connection_command} \"SET PASSWORD FOR '#{node['mysql']['default_user_name']}'@'%' = PASSWORD(#{node['mysql']['default_user_password']})\""
+  command "#{base_connection_command} \"SET PASSWORD FOR '#{node['mysql']['default_user_name']}'@'%' = PASSWORD('#{node['mysql']['default_user_password']}')\""
 end
 
 service "mysql" do

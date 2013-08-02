@@ -20,7 +20,7 @@ Vagrant.configure("2") do |config|
   end
   
   # adapters
-  config.vm.network :private_network, ip: "172.16.0.1"
+  config.vm.network :private_network, ip: "172.16.0.2"
   config.vm.network :private_network, ip: "10.0.0.2"
 
   config.vm.provision :chef_solo do |chef|
