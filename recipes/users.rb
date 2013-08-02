@@ -7,7 +7,7 @@ ruby_block "require shadow library" do
   end
 end
 
-user "openstack" do
+user node['openstack_sandbox']['user_name'] do
   comment "Openstack User"
   gid "users"
   home "/home/openstack"

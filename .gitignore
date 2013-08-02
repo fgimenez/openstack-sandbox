@@ -7,3 +7,6 @@
 .kitchen/
 .kitchen.local.yml
 /iso
+
+/client
+nova.zip
