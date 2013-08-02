@@ -26,7 +26,7 @@ describe 'openstack-sandbox::configuration' do
     let(:base_connection_command) {"/usr/bin/mysql -u root -p#{mysql_root_password} -D mysql -r -B -N -e"}
 
     it "makes the server listen for all ips" do
-      expect(runner).to execute_command("sed -i 's/127.0.0.1/0.0.0.0/g' " +
+      expect(runner).to execute_command("sed -i 's/bind-address/#bind-address/g' " + 
         "/etc/mysql/my.cnf")
     end
 
