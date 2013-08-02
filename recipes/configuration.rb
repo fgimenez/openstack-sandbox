@@ -20,8 +20,7 @@ execute "create default user" do
 end
 
 execute "create default database" do
-  command "#{base_connection_command} \"CREATE DATABASE #{node['mysql']['default_database_name']}\""
-  only_if {`#{base_connection_command} \"SHOW DATABASES LIKE '#{node['mysql']['default_database_name']}'\"`.to_i == 0 }
+  command "#{base_connection_command} \"CREATE DATABASE IF NOT EXISTS #{node['mysql']['default_database_name']}\""
 end
 
 execute "grant permissions" do
@@ -52,4 +51,3 @@ cookbook_file '/etc/nova/nova-compute.conf' do
   mode 0644
   action :create
 end
-
