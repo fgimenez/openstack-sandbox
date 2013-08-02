@@ -15,6 +15,7 @@ end
 
 execute "create admin user" do
   command 'nova-manage user admin openstack'
+  only_if {`nova-manage user list | grep openstack`.to_i == 0}
 end
 
 execute "add cloudamin role to the admin user" do

@@ -37,7 +37,7 @@ describe 'openstack-sandbox::configuration' do
 
     it "creates the default database" do
       expect(runner).to execute_command("#{base_connection_command} \"CREATE DATABASE " +
-        "#{mysql_database_name}\"")
+        "IF NOT EXISTS #{mysql_database_name}\"")
     end
 
     it "grants the default user with the right permissions" do
