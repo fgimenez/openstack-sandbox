@@ -13,6 +13,15 @@ Once this is done, you can install the required vagrant plugins with bindler:
 
     $ bindle install
 
+You should also need two HostOnly interfaces:
+
+    $ VBoxManage hostonlyif create
+    $ VBoxManage hostonlyif ipconfig vboxnet0 --ip 172.16.0.254 --netmask 255.255.0.0
+    $ VBoxManage hostonlyif create
+    $ VBoxManage hostonlyif ipconfig vboxnet1 --ip 10.0.0.254 --netmask 255.0.0.0
+
+The interface names vboxnet0 and vboxnet1 should be different if you have those names previously defined (i.e. vboxnet2 and vboxnet3).
+
 Usage
 -----
 
