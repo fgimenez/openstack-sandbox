@@ -9,9 +9,9 @@ The minimun requirements are a working installation of both virtualbox and vagra
 
     $ bundle install
 
-Once this is done, you can install the required vagrant plugins with bindler:
+Once this is done, you can install the required vagrant plugins:
 
-    $ bindle install
+    $ vagrant plugin bundle
 
 You should also need two HostOnly interfaces:
 
