@@ -29,7 +29,7 @@ First of all, you should get the main machine up:
 
     $ vagrant up
 
-Once the environment is installed, a zipped file with the required credential files to access the default project is also generated, you should copy it to the host machine with:
+Once the environment is installed, a zipped file with the required credential files to access the default project is also generated, you should copy it to the host machine via scp (user openstack has 'openstack' as password by default):
   
     $ mkdir client && cd client
     $ scp openstack@172.16.0.2:nova.zip . && unzip nova.zip
