@@ -49,7 +49,7 @@ Now we can get a prebuilt ubuntu UEC image to be used by our openstack environme
 
 and then upload it to the server:
 
-    $ cloud-publish-tarball ubuntu-12.04-server-cloudimg-i386.tar.gz images i386
+    $ cloud-publish-tarball ubuntu-12.10-server-cloudimg-i386.tar.gz images i386
 
 We can check that all went good listing the images:
 
