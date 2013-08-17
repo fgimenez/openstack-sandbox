@@ -31,3 +31,9 @@ end
 execute "zip project files" do
   command 'nova-manage project zipfile cookbook openstack'
 end
+
+node['openstack_sandbox']['nova']['services'].each do |nova_service|
+  service nova_service do
+    action :restart
+  end
+end
