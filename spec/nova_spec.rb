@@ -1,11 +1,11 @@
 require_relative 'spec_helper'
 
 describe 'openstack-sandbox::nova' do
-  let(:nova_services) {%w[service1 service2]}
+  @nova_services = %w[service1 service2]
 
   let(:runner) do
     runner = ChefSpec::ChefRunner.new(platform: 'ubuntu', version: '12.04') do |node|
-      node.set['openstack_sandbox']['nova']['services'] = nova_services
+      node.set['openstack_sandbox']['nova']['services'] = @nova_services
     end
     runner.converge('openstack-sandbox::nova')
   end
@@ -45,11 +45,11 @@ describe 'openstack-sandbox::nova' do
       expect(runner).to execute_command('nova-manage project zipfile cookbook openstack')
     end
   end
-=begin
-  it 'restarts all nova related services' do
-    nova_services.each do |nova_service|
+
+  @nova_services.each do |nova_service|
+    it 'restarts all nova related services' do
       expect(runner).to restart_service nova_service
     end
   end
-=end
+
 end
