@@ -1,17 +1,14 @@
 require_relative 'spec_helper'
 
 describe 'openstack-sandbox::nova' do
-  @nova_services = %w[service1 service2]
+  let(:nova_services) {%w[service1 service2]}
 
   let(:runner) do
     runner = ChefSpec::ChefRunner.new(platform: 'ubuntu', version: '12.04') do |node|
-      node.set['openstack_sandbox']['nova']['services'] = @nova_services
+      node.set['openstack_sandbox']['nova']['services'] = nova_services
     end
     runner.converge('openstack-sandbox::nova')
   end
-
-  let(:runner) { ChefSpec::ChefRunner.new(platform: 'ubuntu', version: '12.04').
-    converge('openstack-sandbox::nova')}
 
   context 'initialization' do
     it 'syncs the database' do
@@ -46,8 +43,8 @@ describe 'openstack-sandbox::nova' do
     end
   end
 
-  @nova_services.each do |nova_service|
-    it 'restarts all nova related services' do
+  it 'restarts all nova related services' do
+    nova_services.each do |nova_service|
       expect(runner).to restart_service nova_service
     end
   end
