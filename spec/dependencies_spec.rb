@@ -36,6 +36,10 @@ describe 'openstack-sandbox::dependencies' do
     expect(runner).to install_package('glance')
   end
 
+  it "installs the keystone package" do
+    expect(runner).to install_package('keystone')
+  end
+
   it "installs the qemu package" do
     expect(runner).to install_package('qemu')
   end
