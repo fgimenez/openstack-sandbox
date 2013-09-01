@@ -23,7 +23,6 @@ execute "create default database" do
   command "#{base_connection_command} \"CREATE DATABASE IF NOT EXISTS #{node['mysql']['default_database_name']}\""
 end
 
-
 execute "grant permissions" do
   command "#{base_connection_command} \"GRANT ALL ON #{node['mysql']['default_database_name']}.* to '#{node['mysql']['default_user_name']}'@'%'\""
 end
@@ -37,6 +36,11 @@ service "mysql" do
 end
 
 #keystone
+execute "create keystone user" do
+  command "#{base_connection_command} \"CREATE USER '#{node['mysql']['keystone_user_name']}' IDENTIFIED BY '#{node['mysql']['default_user_password']}'\""
+  only_if {`#{base_connection_command} \"SELECT COUNT(*) FROM user where User='#{node['mysql']['keystone_user_name']}'\"`.to_i == 0 }
+end
+
 execute "create keystone database" do
   command "#{base_connection_command} \"CREATE DATABASE IF NOT EXISTS #{node['mysql']['keystone_database_name']}\""
 end
@@ -50,8 +54,8 @@ execute "set keystone user password" do
 end
 
 execute "keystone configuration file" do
-  command "sed -i \"s#^connection.*#connection =mysql://keystone:" +
-    "#{node['mysql']['default_user_password']}@172.16.0.1/keystone#\"" +
+  command "sed -i \"s#^connection.*#connection =mysql://#{node['mysql']['keystone_user_name']}:" +
+    "#{node['mysql']['default_user_password']}@#{node['openstack_sandbox']['host_ip']}/#{node['mysql']['keystone_database_name']}#\"" +
     " /etc/keystone/keystone.conf"
 end
 

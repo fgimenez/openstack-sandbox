@@ -8,3 +8,4 @@ default['openstack_sandbox']['user_name'] = 'openstack'
 default['openstack_sandbox']['nova']['services'] = %w[nova-api nova-cert nova-compute 
                                                       nova-network nova-objectstore nova-scheduler]
 
+default['openstack_sandbox']['host_ip'] = '172.16.0.2'

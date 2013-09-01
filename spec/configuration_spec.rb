@@ -8,6 +8,7 @@ describe 'openstack-sandbox::configuration' do
   let(:mysql_keystone_database_name) {'keystone_db'}
   let(:mysql_keystone_user_name) {'keystone_user'}
   let(:base_connection_command) {"/usr/bin/mysql -u root -p#{mysql_root_password} -D mysql -r -B -N -e"}
+  let(:host_ip) {'0.0.0.0'}
 
   let(:runner) do
     runner = ChefSpec::ChefRunner.new(platform: 'ubuntu', version: '12.04') do |node|
@@ -17,6 +18,7 @@ describe 'openstack-sandbox::configuration' do
       node.set['mysql']['default_database_name'] = mysql_database_name
       node.set['mysql']['keystone_database_name'] = mysql_keystone_database_name
       node.set['mysql']['keystone_user_name'] = mysql_keystone_user_name
+      node.set['openstack_sandbox']['host_ip'] = host_ip
     end
     runner.converge('openstack-sandbox::configuration')
   end
@@ -43,10 +45,6 @@ describe 'openstack-sandbox::configuration' do
         "IF NOT EXISTS #{mysql_database_name}\"")
     end
 
-    it "creates the keystone database" do
-      expect(runner).to execute_command("#{base_connection_command} \"CREATE DATABASE " +
-        "IF NOT EXISTS #{mysql_keystone_database_name}\"")
-    end
 
     it "grants the default user with the right permissions" do
       expect(runner).to execute_command("#{base_connection_command} \"GRANT ALL " +
@@ -71,6 +69,16 @@ describe 'openstack-sandbox::configuration' do
                                            '--libvirt_type=qemu',
                                            0644
     context 'keystone' do
+      it "creates the keystone user" do
+        expect(runner).to execute_command("#{base_connection_command} \"CREATE USER " +
+                                          "'#{mysql_keystone_user_name}' IDENTIFIED BY '#{mysql_user_password}'\"")
+      end
+      
+      it "creates the keystone database" do
+        expect(runner).to execute_command("#{base_connection_command} \"CREATE DATABASE " +
+                                          "IF NOT EXISTS #{mysql_keystone_database_name}\"")
+      end
+
       it "grants the keystone user with the right permissions" do
         expect(runner).to execute_command("#{base_connection_command} \"GRANT ALL " +
                                           "ON #{mysql_keystone_database_name}.* to '#{mysql_keystone_user_name}'@'%'\"")
@@ -82,8 +90,8 @@ describe 'openstack-sandbox::configuration' do
       end
       
       it "configures the keystone service" do
-        expect(runner).to execute_command("sed -i \"s#^connection.*#connection =mysql://keystone:" +
-                                          "#{mysql_user_password}@172.16.0.1/keystone#\"" +
+        expect(runner).to execute_command("sed -i \"s#^connection.*#connection =mysql://#{mysql_keystone_user_name}:" +
+                                          "#{mysql_user_password}@#{host_ip}/#{mysql_keystone_database_name}#\"" +
                                           " /etc/keystone/keystone.conf")
       end
       
