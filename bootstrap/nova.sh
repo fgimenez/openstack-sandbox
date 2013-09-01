@@ -1,6 +1,6 @@
-#!/bin/bash -e
+#!/bin/bash 
 export CLIENT_DIR=../client
-export NOVA_IP=172.26.0.2
+export NOVA_IP=172.16.0.2
 
 echo 'Beginning Nova boostrap...'
 
