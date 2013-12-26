@@ -71,3 +71,7 @@ License and Authors
 MIT License
 
 Authors: Federico Gimenez Nieto <federico.gimenez@gmail.com>
+
+
+[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/fgimenez/openstack-sandbox/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
+
