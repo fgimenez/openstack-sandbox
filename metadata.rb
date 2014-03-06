@@ -1,6 +1,6 @@
 name             "openstack-sandbox"
 maintainer       "Federico Gimenez Nieto"
-maintainer_email "federico.gimenez@gmail.com"
+maintainer_email "fgimenez@coit.es"
 license          "Apache 2.0"
 description      "Setup of openstack"
 long_description IO.read(File.join(File.dirname(__FILE__), 'README.md'))

@@ -5,31 +5,12 @@ The purpose is setting up an openstack sandbox environment with a chef provision
 Requirements
 ------------
 
-The minimun requirements are a working installation of both virtualbox and vagrant. You should also have a ruby runtime, for installing the required gems with bundler:
-
-    $ bundle install
-
-Once this is done, you can install the required vagrant plugins:
-
-    $ vagrant plugin bundle
-
-You should also need two HostOnly interfaces:
-
-    $ VBoxManage hostonlyif create
-    $ VBoxManage hostonlyif ipconfig vboxnet0 --ip 172.16.0.254 --netmask 255.255.0.0
-    $ VBoxManage hostonlyif create
-    $ VBoxManage hostonlyif ipconfig vboxnet1 --ip 10.0.0.254 --netmask 255.0.0.0
-
-The interface names vboxnet0 and vboxnet1 should be different if you have those names previously defined (i.e. vboxnet2 and vboxnet3).
+The minimun requirements are a working installation of both virtualbox and vagrant (1.2+). You should also have a ruby runtime
 
 Usage
 -----
 
-First of all, you should get the main machine up:
-
-    $ vagrant up
-
-Once the environment is installed, bootstrap it (you should use the openstack user password, 'openstack', and your root password to install nova client packages): 
+First of all, you should bootstrap the environment (you should use the openstack user password, 'openstack', and your root password to install nova client packages): 
   
     $ ./bootstrap.sh
 
