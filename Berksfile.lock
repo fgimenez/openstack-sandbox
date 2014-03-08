@@ -1,5 +1,4 @@
 {
-  "sha": "2cffdd726b754c791f0d61ce4c218b28c57750e6",
   "sources": {
     "openstack-sandbox": {
       "path": "."
