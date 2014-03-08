@@ -1,31 +1,21 @@
 require_relative 'spec_helper'
 
 describe 'openstack-sandbox::default' do
-  let(:runner) { ChefSpec::ChefRunner.new(platform: 'ubuntu', version: '12.04').
-    converge('openstack-sandbox::default')}
+  let(:runner) { ChefSpec::Runner.new.converge('openstack-sandbox::default')}
 
-  it 'includes the apt recipe' do
-    expect(runner).to include_recipe('apt')
+  before(:each) do
+    stub_command("\"/usr/bin/mysql\" -u root -e 'show databases;'").and_return(false)
+    stub_command("nova-manage network list | grep 10.0.0.0/").and_return(false)
+    stub_command("nova-manage user list | grep openstack").and_return(false)
+    stub_command("nova-manage role has openstack cloudadmin | grep True").and_return(false)
+    stub_command("nova-manage project list | grep cookbook").and_return(false)
   end
 
-  it 'includes the mysql::server recipe' do
-    expect(runner).to include_recipe('mysql::server')
-  end
-
-  it 'includes the openstack-sandbox::users recipe' do
-    expect(runner).to include_recipe('openstack-sandbox::users')
-  end
-
-  it 'includes the openstack-sandbox::dependencies recipe' do
-    expect(runner).to include_recipe('openstack-sandbox::dependencies')
-  end
-
-  it 'includes the openstack-sandbox::configuration recipe' do
-    expect(runner).to include_recipe('openstack-sandbox::configuration')
-  end
-
-  it 'includes the openstack-sandbox::nova recipe' do
-    expect(runner).to include_recipe('openstack-sandbox::nova')
+  %w(apt mysql::server openstack-sandbox::users openstack-sandbox::dependencies
+openstack-sandbox::configuration openstack-sandbox::nova).each do |recipe|
+    it "includes the #{recipe} recipe" do
+      expect(runner).to include_recipe(recipe)
+    end
   end
 
 end

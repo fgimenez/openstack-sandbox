@@ -11,7 +11,7 @@ describe 'openstack-sandbox::configuration' do
   let(:host_ip) {'0.0.0.0'}
 
   let(:runner) do
-    runner = ChefSpec::ChefRunner.new(platform: 'ubuntu', version: '12.04') do |node|
+    runner = ChefSpec::Runner.new do |node|
       node.set['mysql']['server_root_password'] = mysql_root_password
       node.set['mysql']['default_user_name'] = mysql_user_name
       node.set['mysql']['default_user_password'] = mysql_user_password
@@ -31,29 +31,18 @@ describe 'openstack-sandbox::configuration' do
 
   context 'mysql' do
     it "makes the server listen for all ips" do
-      expect(runner).to execute_command("sed -i 's/bind-address/#bind-address/g' " + 
+      expect(runner).to run_execute("sed -i 's/^bind-address/#bind-address/g' " + 
         "/etc/mysql/my.cnf")
     end
 
-    it "creates the default user" do
-      expect(runner).to execute_command("#{base_connection_command} \"CREATE USER " +
-       "'#{mysql_user_name}' IDENTIFIED BY '#{mysql_user_password}'\"")
-    end
-
     it "creates the default database" do
-      expect(runner).to execute_command("#{base_connection_command} \"CREATE DATABASE " +
+      expect(runner).to run_execute("#{base_connection_command} \"CREATE DATABASE " +
         "IF NOT EXISTS #{mysql_database_name}\"")
     end
 
-
     it "grants the default user with the right permissions" do
-      expect(runner).to execute_command("#{base_connection_command} \"GRANT ALL " +
-        "ON #{mysql_database_name}.* to '#{mysql_user_name}'@'%'\"")
-    end
-
-    it "sets the nova password" do
-      expect(runner).to execute_command("#{base_connection_command} \"SET PASSWORD FOR "  +
-        "'#{mysql_user_name}'@'%' = PASSWORD('#{mysql_user_password}')\"")
+      expect(runner).to run_execute("#{base_connection_command} \"GRANT ALL " +
+        "ON #{mysql_database_name}.* to '#{mysql_user_name}'@'%' IDENTIFIED BY '#{mysql_user_password}'\"")
     end
 
     it "restarts the mysqld service" do
@@ -69,28 +58,19 @@ describe 'openstack-sandbox::configuration' do
                                            '--libvirt_type=qemu',
                                            0644
     context 'keystone' do
-      it "creates the keystone user" do
-        expect(runner).to execute_command("#{base_connection_command} \"CREATE USER " +
-                                          "'#{mysql_keystone_user_name}' IDENTIFIED BY '#{mysql_user_password}'\"")
-      end
-      
       it "creates the keystone database" do
-        expect(runner).to execute_command("#{base_connection_command} \"CREATE DATABASE " +
+        expect(runner).to run_execute("#{base_connection_command} \"CREATE DATABASE " +
                                           "IF NOT EXISTS #{mysql_keystone_database_name}\"")
       end
 
       it "grants the keystone user with the right permissions" do
-        expect(runner).to execute_command("#{base_connection_command} \"GRANT ALL " +
-                                          "ON #{mysql_keystone_database_name}.* to '#{mysql_keystone_user_name}'@'%'\"")
-      end
-      
-      it "sets the keystone password" do
-        expect(runner).to execute_command("#{base_connection_command} \"SET PASSWORD FOR "  +
-                                          "'#{mysql_keystone_user_name}'@'%' = PASSWORD('#{mysql_user_password}')\"")
+        expect(runner).to run_execute("#{base_connection_command} \"GRANT ALL " +
+                                          "ON #{mysql_keystone_database_name}.* to '#{mysql_keystone_user_name}'@'%'" +
+                                          " IDENTIFIED BY '#{mysql_user_password}'\"")
       end
       
       it "configures the keystone service" do
-        expect(runner).to execute_command("sed -i \"s#^connection.*#connection =mysql://#{mysql_keystone_user_name}:" +
+        expect(runner).to run_execute("sed -i \"s#^connection.*#connection =mysql://#{mysql_keystone_user_name}:" +
                                           "#{mysql_user_password}@#{host_ip}/#{mysql_keystone_database_name}#\"" +
                                           " /etc/keystone/keystone.conf")
       end
@@ -100,7 +80,7 @@ describe 'openstack-sandbox::configuration' do
       end
 
       it "synces the required dbs" do
-        expect(runner).to execute_command("keystone-manage db_sync")
+        expect(runner).to run_execute("keystone-manage db_sync")
       end
 
     end

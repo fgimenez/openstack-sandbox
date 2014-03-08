@@ -9,22 +9,24 @@ end
 
 #mysql
 execute "make mysql server listen on all ips" do
-  command "sed -i 's/bind-address/#bind-address/g' /etc/mysql/my.cnf"
-  only_if {`grep \#bind-address /etc/mysql/my.cnf`.to_i == 0}
+  command "sed -i 's/^bind-address/#bind-address/g' /etc/mysql/my.cnf"
 end
 
 base_connection_command = "/usr/bin/mysql -u root -p#{node['mysql']['server_root_password']} -D mysql -r -B -N -e"
+
+=begin
 execute "create default user" do
   command "#{base_connection_command} \"CREATE USER '#{node['mysql']['default_user_name']}' IDENTIFIED BY '#{node['mysql']['default_user_password']}'\""
-  only_if {`#{base_connection_command} \"SELECT COUNT(*) FROM user where User='#{node['mysql']['default_user_name']}'\"`.to_i == 0 }
+  not_if "#{base_connection_command} \"SELECT COUNT(*) FROM user where User='#{node['mysql']['default_user_name']}'\""
 end
+=end
 
 execute "create default database" do
   command "#{base_connection_command} \"CREATE DATABASE IF NOT EXISTS #{node['mysql']['default_database_name']}\""
 end
 
-execute "grant permissions" do
-  command "#{base_connection_command} \"GRANT ALL ON #{node['mysql']['default_database_name']}.* to '#{node['mysql']['default_user_name']}'@'%'\""
+execute "grant permissions and create user" do
+  command "#{base_connection_command} \"GRANT ALL ON #{node['mysql']['default_database_name']}.* to '#{node['mysql']['default_user_name']}'@'%' IDENTIFIED BY '#{node['mysql']['default_user_password']}'\""
 end
 
 execute "set default user password" do
@@ -36,21 +38,19 @@ service "mysql" do
 end
 
 #keystone
+=begin
 execute "create keystone user" do
   command "#{base_connection_command} \"CREATE USER '#{node['mysql']['keystone_user_name']}' IDENTIFIED BY '#{node['mysql']['default_user_password']}'\""
-  only_if {`#{base_connection_command} \"SELECT COUNT(*) FROM user where User='#{node['mysql']['keystone_user_name']}'\"`.to_i == 0 }
+  not_if "#{base_connection_command} \"SELECT COUNT(*) FROM user where User='#{node['mysql']['keystone_user_name']}'\""
 end
+=end
 
 execute "create keystone database" do
   command "#{base_connection_command} \"CREATE DATABASE IF NOT EXISTS #{node['mysql']['keystone_database_name']}\""
 end
 
-execute "grant keystone permissions" do
-  command "#{base_connection_command} \"GRANT ALL ON #{node['mysql']['keystone_database_name']}.* to '#{node['mysql']['keystone_user_name']}'@'%'\""
-end
-
-execute "set keystone user password" do
-  command "#{base_connection_command} \"SET PASSWORD FOR '#{node['mysql']['keystone_user_name']}'@'%' = PASSWORD('#{node['mysql']['default_user_password']}')\""
+execute "grant keystone permissions and create user" do
+  command "#{base_connection_command} \"GRANT ALL ON #{node['mysql']['keystone_database_name']}.* to '#{node['mysql']['keystone_user_name']}'@'%' IDENTIFIED BY '#{node['mysql']['default_user_password']}'\""
 end
 
 execute "keystone configuration file" do

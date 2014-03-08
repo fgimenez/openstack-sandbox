@@ -6,7 +6,7 @@ end
 execute "create private network" do
   command "nova-manage network create vmnet " +
     "--fixed_range_v4=10.0.0.0/8 --network_size=64 --bridge_interface=eth2"
-  only_if {`nova-manage network list | grep 10\.0\.0\.0/`.to_i == 0}
+  not_if "nova-manage network list | grep 10\.0\.0\.0/"
 end
 
 execute "create public network" do

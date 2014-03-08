@@ -4,7 +4,7 @@ describe 'openstack-sandbox::users' do
   let(:user_name) {'user_name'}
 
   let(:runner) do
-    runner = ChefSpec::ChefRunner.new(platform: 'ubuntu', version: '12.04') do |node|
+    runner = ChefSpec::Runner.new do |node|
       node.set['openstack_sandbox']['user_name'] = user_name
     end
     runner.converge('openstack-sandbox::users')
